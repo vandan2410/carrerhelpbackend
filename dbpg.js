@@ -5,6 +5,7 @@ const app=express();
 const session = require('express-session') ;
 const cookieParser = require ('cookie-parser')
 const bodyParser = require('body-parser')
+const jwt = require('jsonwebtoken')
 app.use(bodyParser.json());
 app.use(cors({
     origin : ["http://localhost:3000"],
@@ -32,13 +33,31 @@ const db = new Client ({
     database: 'postgres'
 })
 db.connect(); 
-app.get('/home',(req,res) =>{
-    if(req.session.uname){
-        return res.json({valid:true,uname:req.session.uname})
+const verifyUser = (req,res,next) =>{
+    const token = req.cookies.token;
+    if(!token)
+    {
+        return res.json({Message: "Token not sent"});
     }
     else{
-        return res.json({valid:false});
+        jwt.verify(token,'our-jsonwebtoken-secret-key',(err,decoded)=>{
+            if(err){
+                return res.json({Message:"invalid Authentication"});
+            }
+            else{
+                next();
+            }
+        })
     }
+}
+app.get('/home',verifyUser,(req,res) =>{
+    // if(req.session.uname){
+    //     return res.json({valid:true,uname:req.session.uname})
+    // }
+    // else{
+    //     return res.json({valid:false});
+    // }
+    return res.json({valid:true})
 } )
 app.post('/Signin' , (req,res)=>
 {
@@ -69,8 +88,12 @@ app.post('/Login' , (req,res)=>
             return res.status(500).json({Message:"Error in Node"});
         }
         if (result.rowCount > 0) {
-            req.session.uname=username;
+            // req.session.uname=username;
             
+            // return res.json({ login:true });
+            const name=username;
+            const token=jwt.sign({name},'our-jsonwebtoken-secret-key',{expiresIn:'1d'});
+            res.cookie('token',token);
             return res.json({ login:true });
 
           } else {
@@ -78,6 +101,10 @@ app.post('/Login' , (req,res)=>
             return res.json({ login:false });
           }
     })
+})
+app.get('/logout',(req,res)=>{
+    res.clearCookie("token");
+    return res.json({logout:true});
 })
 
 app.listen(5000,()=>{
