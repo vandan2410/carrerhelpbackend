@@ -59,3 +59,10 @@ export const loginUser = async (req, res) => {
     return res.status(500).json({ message: "Failed to authenticate user" });
   }
 };
+
+export const logoutUser = async (req, res) => {
+  res.clearCookie("bigCookie");
+  res
+    .status(200)
+    .json({ success: true, message: "User logged out successfully" });
+};
