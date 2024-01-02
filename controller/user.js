@@ -52,7 +52,7 @@ export const loginUser = async (req, res) => {
     delete user?.password;
 
     const token = jwt.sign({ userId: user?.id }, process.env.JWT_SECRET);
-    res.cookie("bigCookie", { token }, { httpOnly: true });
+    res.cookie("bigCookie", token , { httpOnly: true });
     res.status(200).json(user);
   } catch (error) {
     console.log(error);
