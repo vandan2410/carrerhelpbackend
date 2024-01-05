@@ -2,13 +2,15 @@ import prisma from "./prismaClient.js";
 
 const createPost = async (payload) => {
   try {
-    const { title, content, authorId, companyId } = payload;
+    const { title, content, authorId, companyId, batch, CTC } = payload;
     const newPost = await prisma.post.create({
       data: {
         title,
         content,
+        batch,
+        CTC,
         author: {
-          connect: { id: authorId }, 
+          connect: { id: authorId },
         },
         companyName: {
           connect: { id: companyId },
@@ -23,4 +25,50 @@ const createPost = async (payload) => {
   }
 };
 
-export { createPost };
+const fetchUserPosts = async (userId) => {
+  try {
+    const userPosts = await prisma.post.findMany({
+      where: {
+        authorId: userId,
+      },
+    });
+
+    return userPosts;
+  } catch (error) {
+    console.log("Failed to fetch posts for the given user", error);
+    throw { notMain: true, error };
+  }
+};
+
+const updatePost = async (postId, payload) => {
+  try {
+    const updatedPost = await prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: payload,
+    });
+
+    return updatedPost;
+  } catch (error) {
+    console.log("Failed to update given post", error);
+    throw { notMain: true, error };
+  }
+};
+
+const deletePost = async (postId) => {
+  try {
+    const deletedPost = await prisma.post.delete({
+      where: {
+        id: postId,
+      },
+    });
+
+    return deletedPost;
+  } catch (error) {
+    console.log("Failed to delete given post", error);
+    throw { notMain: true, error };
+  }
+};
+
+export { createPost, fetchUserPosts, updatePost, deletePost };

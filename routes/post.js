@@ -4,22 +4,33 @@ import {
   validateUserPermissions,
 } from "../middleware/auth.js";
 
-import { addPost } from "../controller/post.js";
+import {
+  addPost,
+  editPost,
+  getUserPosts,
+  removePost,
+} from "../controller/post.js";
+import {
+  validatePayloadForEditPost,
+  validatePayloadForNewPost,
+} from "../middleware/post.js";
 
 const router = express.Router();
 
-router.post("/newPost", authenticateUser, addPost);
-// router.put(
-//   "/editPost/:postId",
-//   authenticateUser,
-//   validateUserPermissions,
-//   editPost
-// );
-// router.delete(
-//   "/removePost/:postId",
-//   authenticateUser,
-//   validateUserPermissions,
-//   removePost
-// );
+router.post("/newPost", authenticateUser, validatePayloadForNewPost, addPost);
+router.get("/userPosts/:userId", authenticateUser, getUserPosts);
+router.put(
+  "/editPost/:postId",
+  authenticateUser,
+  validateUserPermissions,
+  validatePayloadForEditPost,
+  editPost
+);
+router.delete(
+  "/removePost/:postId",
+  authenticateUser,
+  validateUserPermissions,
+  removePost
+);
 
 export default router;

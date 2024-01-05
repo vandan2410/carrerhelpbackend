@@ -1,32 +1,70 @@
+import { Success, Error } from "../utils/responseModels.js";
 
+export const validatePayloadForNewPost = async (req, res, next) => {
+  let errs = [];
+  const { title, content, companyName, CTC, isAnonymous, batch } = req.body;
 
-// export const validatePayloadForPost= async (req, res, next) => {
-//     try {
-//       const token = req.cookies.bigCookie;
-  
-//       if (!token) {
-//         return res.status(401).json({ message: "Unauthorized - Missing Token" });
-//       }
-  
-//       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-  
-//       const post = await prisma.post.findUnique({
-//         where: { id: postId },
-//       });
-  
-//       if (!post) {
-//         return res.status(404).json({ message: "Invalid postId" });
-//       }
-  
-//       if (post.authorId != decodedToken.userId) {
-//         return res
-//           .status(401)
-//           .json({ message: "Unauthorized - users are only allowed to edit their own post" });
-//       }
-  
-//       next();
-//     } catch (error) {
-//       console.error(error);
-//       return res.status(500).json({ message: "Internal Server Error" });
-//     }
-//   };
+  if (!title || typeof title !== "string" || title.trim() === "") {
+    errs.push("Title is invalid - expected a non empty string");
+  }
+  if (!content || typeof content !== "string" || content.trim() === "") {
+    errs.push("Content is invalid - expected a non empty string");
+  }
+  if (
+    !companyName ||
+    typeof companyName !== "string" ||
+    companyName.trim() === ""
+  ) {
+    errs.push("CompanyName is invalid -  expected a non empty string");
+  }
+  if (!CTC || typeof CTC !== "number") {
+    errs.push("CTC is invalid - expected a number");
+  }
+  if (!isAnonymous || typeof isAnonymous !== "boolean") {
+    errs.push("isAnonymous flag is invalid -  expected a boolean");
+  }
+  if (!batch || typeof batch !== "number") {
+    errs.push("Batch is invalid - expected a number");
+  }
+  if (errs.length === 0) {
+    next();
+  } else {
+    res.status(400).json(new Error(errs));
+  }
+};
+
+export const validatePayloadForEditPost = async (req, res, next) => {
+  let errs = [];
+  const { title, content, companyName, CTC, batch } = req.body;
+
+  if (
+    title !== undefined &&
+    (typeof title !== "string" || title.trim() === "")
+  ) {
+    errs.push("Title is invalid - expected a non-empty string");
+  }
+  if (
+    content !== undefined &&
+    (typeof content !== "string" || content.trim() === "")
+  ) {
+    errs.push("Content is invalid - expected a non-empty string");
+  }
+  if (
+    companyName !== undefined &&
+    (typeof companyName !== "string" || companyName.trim() === "")
+  ) {
+    errs.push("Company Name is invalid - expected a non-empty string");
+  }
+  if (CTC !== undefined && typeof CTC !== "number") {
+    errs.push("CTC is invalid - expected a number");
+  }
+  if (batch !== undefined && typeof batch !== "number") {
+    errs.push("Batch is invalid - expected a number");
+  }
+
+  if (errs.length === 0) {
+    next();
+  } else {
+    res.status(400).json(new Error(errs));
+  }
+};
