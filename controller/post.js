@@ -2,13 +2,18 @@ import {
   addCompanyInfo,
   fetchCompanyInfoByName,
 } from "../utils/companyCRUD.js";
-import { createPost, fetchUserPosts, deletePost, updatePost } from "../utils/postCRUD.js";
+import {
+  createPost,
+  fetchUserPosts,
+  deletePost,
+  updatePost,
+} from "../utils/postCRUD.js";
 import { Success, Error } from "../utils/responseModels.js";
 import { fetchUserByUserName } from "../utils/userCRUD.js";
 
 export const addPost = async (req, res) => {
   try {
-    const { title, content, companyName, CTC, isAnonymous, batch } = req.body;
+    const { title, content, companyName, ctc, isAnonymous, batch } = req.body;
 
     let companyInfo = await fetchCompanyInfoByName(companyName);
 
@@ -24,7 +29,7 @@ export const addPost = async (req, res) => {
       title,
       content,
       batch,
-      CTC,
+      ctc,
       authorId,
       companyId: companyInfo.id,
     };

@@ -2,13 +2,13 @@ import prisma from "./prismaClient.js";
 
 const createPost = async (payload) => {
   try {
-    const { title, content, authorId, companyId, batch, CTC } = payload;
+    const { title, content, authorId, companyId, batch, ctc } = payload;
     const newPost = await prisma.post.create({
       data: {
         title,
         content,
         batch,
-        CTC,
+        ctc,
         author: {
           connect: { id: authorId },
         },

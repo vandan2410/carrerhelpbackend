@@ -21,7 +21,7 @@ model Post {
   id         Int        @id @default(autoincrement())
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
-  package    Int?       
+  ctc    Int?       
   batch      Int?       
   title      String
   content    String     @default("")

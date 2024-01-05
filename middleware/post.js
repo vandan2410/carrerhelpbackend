@@ -2,7 +2,7 @@ import { Success, Error } from "../utils/responseModels.js";
 
 export const validatePayloadForNewPost = async (req, res, next) => {
   let errs = [];
-  const { title, content, companyName, CTC, isAnonymous, batch } = req.body;
+  const { title, content, companyName, ctc, isAnonymous, batch } = req.body;
 
   if (!title || typeof title !== "string" || title.trim() === "") {
     errs.push("Title is invalid - expected a non empty string");
@@ -17,8 +17,8 @@ export const validatePayloadForNewPost = async (req, res, next) => {
   ) {
     errs.push("CompanyName is invalid -  expected a non empty string");
   }
-  if (!CTC || typeof CTC !== "number") {
-    errs.push("CTC is invalid - expected a number");
+  if (!ctc || typeof ctc !== "number") {
+    errs.push("ctc is invalid - expected a number");
   }
   if (!isAnonymous || typeof isAnonymous !== "boolean") {
     errs.push("isAnonymous flag is invalid -  expected a boolean");
@@ -35,7 +35,7 @@ export const validatePayloadForNewPost = async (req, res, next) => {
 
 export const validatePayloadForEditPost = async (req, res, next) => {
   let errs = [];
-  const { title, content, companyName, CTC, batch } = req.body;
+  const { title, content, companyName, ctc, batch } = req.body;
 
   if (
     title !== undefined &&
@@ -55,8 +55,8 @@ export const validatePayloadForEditPost = async (req, res, next) => {
   ) {
     errs.push("Company Name is invalid - expected a non-empty string");
   }
-  if (CTC !== undefined && typeof CTC !== "number") {
-    errs.push("CTC is invalid - expected a number");
+  if (ctc !== undefined && typeof ctc !== "number") {
+    errs.push("ctc is invalid - expected a number");
   }
   if (batch !== undefined && typeof batch !== "number") {
     errs.push("Batch is invalid - expected a number");
