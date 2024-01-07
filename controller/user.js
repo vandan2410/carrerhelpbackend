@@ -3,6 +3,10 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import prisma from "../utils/prismaClient.js";
 import { Error, Success } from "../utils/responseModels.js";
+
+import {
+  fetchUserById
+} from "../utils/userCRUD.js"
 dotenv.config();
 
 const hashPassword = async (password) => {
@@ -67,3 +71,15 @@ export const logoutUser = async (req, res) => {
     .status(200)
     .json(new Success("User logged out successfully"));
 };
+
+export const getUserdetails = async (req ,res) =>{
+  try{
+    const userId = Number(req.params.userId);
+    let user = await fetchUserById(userId);
+    res.status(200).json(new Success("Successfully fetched", user));
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(new Error("Failed to fetch user"));
+  }
+
+}

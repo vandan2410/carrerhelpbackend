@@ -71,4 +71,19 @@ const deletePost = async (postId) => {
   }
 };
 
-export { createPost, fetchUserPosts, updatePost, deletePost };
+const fetchPostInfoByCompanyId = async (companyId) => {
+  try {
+    const compId = Number(companyId);
+    const postInfo = await prisma.post.findMany({
+      where: {
+        companyId: compId,
+      },
+    });
+
+    return postInfo;
+  } catch (error) {
+    console.log("Error in fetching the company name", error);
+    throw { notMain: true, error };
+  }
+};
+export { createPost, fetchUserPosts, updatePost, deletePost  ,fetchPostInfoByCompanyId};

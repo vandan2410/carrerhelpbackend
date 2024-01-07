@@ -7,6 +7,8 @@ import {
   fetchUserPosts,
   deletePost,
   updatePost,
+  
+  fetchPostInfoByCompanyId,
 } from "../utils/postCRUD.js";
 import { Success, Error } from "../utils/responseModels.js";
 import { fetchUserByUserName } from "../utils/userCRUD.js";
@@ -85,5 +87,27 @@ export const removePost = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json(new Error("Failed to delete given post"));
+  }
+};
+
+export const getAllPosts = async (req, res) => {
+  try {
+    let allPosts = await fetchAllPosts();
+
+    res.status(200).json(new Success("Successfully fetched", allPosts));
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(new Error("Failed to fetch all post"));
+  }
+};
+
+export const getPostByCompanyId = async (req, res) => {
+  try {
+    const companyId = Number(req.params.companyId);
+    let allPosts = await fetchPostInfoByCompanyId(companyId);
+    res.status(200).json(new Success("Successfully fetched", allPosts));
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(new Error("Failed to fetch all post"));
   }
 };

@@ -9,6 +9,9 @@ import {
   editPost,
   getUserPosts,
   removePost,
+  getAllPosts,
+  getPostByCompanyId
+  
 } from "../controller/post.js";
 import {
   validatePayloadForEditPost,
@@ -19,6 +22,8 @@ const router = express.Router();
 
 router.post("/newPost", authenticateUser, validatePayloadForNewPost, addPost);
 router.get("/userPosts/:userId", authenticateUser, getUserPosts);
+router.get("/getPosts",getAllPosts);
+router.get('/getPostsbyCompanyId/:companyId',getPostByCompanyId)
 router.put(
   "/editPost/:postId",
   authenticateUser,

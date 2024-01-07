@@ -33,4 +33,31 @@ const fetchCompanyInfoByName = async (companyName) => {
   }
 };
 
-export { addCompanyInfo, fetchCompanyInfoByName };
+const fetchCompanyInfoById = async (companyId) => {
+  try {
+    const compId = Number(companyId);
+    const companyInfo = await prisma.company.findUnique({
+      where: {
+        id: compId,
+      },
+    });
+
+    return companyInfo;
+  } catch (error) {
+    console.log("Error in fetching the company name", error);
+    throw { notMain: true, error };
+  }
+};
+
+const fetchAllCompanies = async () =>{
+  try{
+    const companies=await prisma.company.findMany();
+    return companies;
+
+  } catch(error){
+    console.log("Error in fetching the all companies", error);
+    throw { notMain: true, error };
+  }
+}
+
+export { addCompanyInfo, fetchCompanyInfoByName, fetchCompanyInfoById , fetchAllCompanies};

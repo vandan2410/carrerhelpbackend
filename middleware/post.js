@@ -20,7 +20,7 @@ export const validatePayloadForNewPost = async (req, res, next) => {
   if (!ctc || typeof ctc !== "number") {
     errs.push("ctc is invalid - expected a number");
   }
-  if (!isAnonymous || typeof isAnonymous !== "boolean") {
+  if ( typeof isAnonymous !== "boolean") {
     errs.push("isAnonymous flag is invalid -  expected a boolean");
   }
   if (!batch || typeof batch !== "number") {

@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import UserRouter from "./routes/user.js";
 import PostRouter from "./routes/post.js";
+import CompanyRouter from './routes/company.js'
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(cookieParser());
 
 app.use("/api/user", UserRouter);
 app.use("/api/post", PostRouter);
+app.use("/api/company",CompanyRouter)
 
 app.listen(5000, async () => {
   console.log("server is running on port 5000");
