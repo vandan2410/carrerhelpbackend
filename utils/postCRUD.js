@@ -42,11 +42,22 @@ const fetchUserPosts = async (userId) => {
 
 const updatePost = async (postId, payload) => {
   try {
+    const dynamicPayload = {
+      ...payload,
+    };
+    if (payload.companyName) {
+      dynamicPayload.companyName = {
+        connectOrCreate: {
+          where: { name: payload.companyName },
+          create: { name: payload.companyName },
+        },
+      };
+    }
     const updatedPost = await prisma.post.update({
       where: {
         id: postId,
       },
-      data: payload,
+      data: dynamicPayload,
     });
 
     return updatedPost;
