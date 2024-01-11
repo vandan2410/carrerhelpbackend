@@ -51,7 +51,13 @@ const fetchCompanyInfoById = async (companyId) => {
 
 const fetchAllCompanies = async () =>{
   try{
-    const companies=await prisma.company.findMany();
+    const companies=await prisma.company.findMany({
+      orderBy: [
+        {
+          name: 'asc',
+        }
+      ]
+    });
     return companies;
 
   } catch(error){

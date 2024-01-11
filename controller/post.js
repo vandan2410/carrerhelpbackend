@@ -7,7 +7,7 @@ import {
   fetchUserPosts,
   deletePost,
   updatePost,
-  
+  fetchPostDetailsWithCompanyName,
   fetchPostInfoByCompanyId,
 } from "../utils/postCRUD.js";
 import { Success, Error } from "../utils/responseModels.js";
@@ -110,4 +110,16 @@ export const getPostByCompanyId = async (req, res) => {
     console.log(error);
     res.status(500).json(new Error("Failed to fetch all post"));
   }
+};
+
+export const getPostDetailsWithCompanyName =async (req ,res )=>{
+  try{
+    const postId=Number(req.params.postId);
+    let post = await fetchPostDetailsWithCompanyName(postId);
+    res.status(200).json(new Success("Successfully fetched",post));
+  } catch(error){
+    console.log(error);
+    res.status(500).json(new Error("Failed to fetch  post"));
+  }
+
 };

@@ -10,8 +10,8 @@ import {
   getUserPosts,
   removePost,
   getAllPosts,
-  getPostByCompanyId
-  
+  getPostByCompanyId,
+  getPostDetailsWithCompanyName
 } from "../controller/post.js";
 import {
   validatePayloadForEditPost,
@@ -24,6 +24,7 @@ router.post("/newPost", authenticateUser, validatePayloadForNewPost, addPost);
 router.get("/userPosts/:userId", authenticateUser, getUserPosts);
 router.get("/getPosts",getAllPosts);
 router.get('/getPostsbyCompanyId/:companyId',getPostByCompanyId)
+router.get('/postwithcompanyname/:postId',getPostDetailsWithCompanyName);
 router.put(
   "/editPost/:postId",
   authenticateUser,

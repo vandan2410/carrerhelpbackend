@@ -30,7 +30,29 @@ const fetchUserByUserName = async (userName) => {
   }
 };
 
+const updateUser = async (userId , newDetails) => {
+  try{
+    const { userName, linkedin, github, bio } = newDetails;
+    const updatedUser = await prisma.user.update({
+      where:{id : userId},
+      data:{
+        userName:userName,
+        linkedinUrl:linkedin,
+        githubUrl:github,
+        bio:bio
+      },
+    });
+    return updatedUser;
+    
+  }
+  catch(error){
+    console.log("Failed to update user in db", error);
+    throw { notMain: true, error };
+  }
+}
+
 export {
   fetchUserById,
-  fetchUserByUserName
+  fetchUserByUserName,
+  updateUser
 };

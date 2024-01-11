@@ -4,9 +4,7 @@ import dotenv from "dotenv";
 import prisma from "../utils/prismaClient.js";
 import { Error, Success } from "../utils/responseModels.js";
 
-import {
-  fetchUserById
-} from "../utils/userCRUD.js"
+import { fetchUserById, updateUser } from "../utils/userCRUD.js";
 dotenv.config();
 
 const hashPassword = async (password) => {
@@ -57,7 +55,7 @@ export const loginUser = async (req, res) => {
     delete user?.password;
 
     const token = jwt.sign({ userId: user?.id }, process.env.JWT_SECRET);
-    res.cookie("bigCookie", token, { httpOnly: true });
+    res.cookie("bigCookie", token);
     res.status(200).json(new Success("Successfully logged in user", user));
   } catch (error) {
     console.log(error);
@@ -67,13 +65,11 @@ export const loginUser = async (req, res) => {
 
 export const logoutUser = async (req, res) => {
   res.clearCookie("bigCookie");
-  res
-    .status(200)
-    .json(new Success("User logged out successfully"));
+  res.status(200).json(new Success("User logged out successfully"));
 };
 
-export const getUserdetails = async (req ,res) =>{
-  try{
+export const getUserdetails = async (req, res) => {
+  try {
     const userId = Number(req.params.userId);
     let user = await fetchUserById(userId);
     res.status(200).json(new Success("Successfully fetched", user));
@@ -81,5 +77,15 @@ export const getUserdetails = async (req ,res) =>{
     console.log(error);
     res.status(500).json(new Error("Failed to fetch user"));
   }
+};
+export const editUser = async (req, res) => {
+  const userId = Number(req.params.userId); // Assuming user ID is passed as a route parameter
+  const newDetails = req.body; // Assuming new details are passed in the request body
 
-}
+  try {
+    const updatedUser = await updateUser(userId, newDetails);
+    res.status(200).json({ message: "User updated successfully", updatedUser });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update user" });
+  }
+};

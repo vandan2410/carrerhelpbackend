@@ -14,6 +14,9 @@ model User {
   email String  @unique
   userName  String
   password String
+  linkedinUrl  String?  @default("")
+  githubUrl    String?  @default("")
+  bio          String?  @default("")
   posts Post[]
 }
 

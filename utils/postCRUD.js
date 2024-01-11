@@ -86,4 +86,25 @@ const fetchPostInfoByCompanyId = async (companyId) => {
     throw { notMain: true, error };
   }
 };
-export { createPost, fetchUserPosts, updatePost, deletePost  ,fetchPostInfoByCompanyId};
+
+const fetchPostDetailsWithCompanyName = async (postId) => {
+  try {
+    const postDetails = await prisma.post.findUnique({
+      where: { id: postId },
+      include: {
+        companyName: {
+          select: {
+            name: true,
+          },
+        },
+        
+      },
+    });
+
+    return postDetails;
+  } catch (error) {
+    console.error('Error fetching post details:', error);
+    throw error;
+  }
+}
+export { createPost, fetchUserPosts, updatePost, deletePost  ,fetchPostInfoByCompanyId ,fetchPostDetailsWithCompanyName } ;
