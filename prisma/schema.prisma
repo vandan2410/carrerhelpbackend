@@ -14,5 +14,29 @@ model User {
   email String  @unique
   userName  String
   password String
+  linkedinUrl  String?  @default("")
+  githubUrl    String?  @default("")
+  bio          String?  @default("")
+  posts Post[]
+}
+
+model Post {
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  ctc    Int?       
+  batch      Int?       
+  title      String
+  content    String     @default("")
+  companyName    Company    @relation(fields: [companyId], references: [id])  
+  companyId  Int 
+  author     User       @relation(fields: [authorId], references: [id])
+  authorId   Int
+}
+
+model Company {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  posts Post[]
 }
 
