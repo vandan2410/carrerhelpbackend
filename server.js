@@ -11,7 +11,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["https://carrerhelp.vercel.app"],
     methods: ["POST", "GET", "PUT", "DELETE"],
     credentials: true,
   })
@@ -23,6 +23,7 @@ app.use("/api/user", UserRouter);
 app.use("/api/post", PostRouter);
 app.use("/api/company",CompanyRouter)
 
-app.listen(5000, async () => {
-  console.log("server is running on port 5000");
+app.listen(process.env.PORT || 5000, async () => {
+  console.log("Server is running on port " + (process.env.PORT || 5000));
 });
+
